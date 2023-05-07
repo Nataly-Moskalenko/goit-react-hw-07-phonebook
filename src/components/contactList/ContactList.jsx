@@ -38,7 +38,7 @@ export default function ContactList() {
             <li className={css.contactItem} key={contact.id}>
               <ContactItem
                 name={contact.name}
-                number={contact.number}
+                number={contact.phone}
                 id={contact.id}
                 onDeleteContact={handleDeleteContact}
               />

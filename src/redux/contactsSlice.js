@@ -1,39 +1,64 @@
+import { fetchContacts } from './operations';
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const contactsInitialState = {
-  data: [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ],
+  items: [],
+  isLoading: false,
+  error: null,
 };
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: contactsInitialState.data,  
-  reducers: {
-    addContact: {
-      reducer(state, action) {
-        return (state = [action.payload, ...state]);        
-      },
-      prepare(values) {
-        return {
-          payload: {
-            id: nanoid(),
-            name: values.name,
-            number: values.number,
-          },
-        };
-      },
+  initialState: contactsInitialState,
+  extraReducers: {
+    [fetchContacts.pending](state) {
+      state.isLoading = true;
     },
-
-    deleteContact(state, action) {
-      return state.filter(contact => contact.id !== action.payload);
+    [fetchContacts.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = action.payload;
+    },
+    [fetchContacts.rejected](state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
+  // reducers: {
+  //   fetchingInProgress(state) {
+  //     state.isLoading = true;
+  //   },
+  //   fetchingSuccess(state, action) {
+  //     state.isLoading = false;
+  //     state.error = null;
+  //     state.items = action.payload;
+  //   },
+  //   fetchingError(state, action) {
+  //     state.isLoading = false;
+  //     state.error = action.payload;
+  //   },
+  addContact: {
+    reducer(state, action) {
+      return (state = [action.payload, ...state.items]);
+    },
+    prepare(values) {
+      return {
+        payload: {
+          id: nanoid(),
+          name: values.name,
+          phone: values.number,
+        },
+      };
+    },
+  },
+
+  deleteContact(state, action) {
+    return state.items.filter(contact => contact.id !== action.payload);
+  },
+  // },
 });
 
 export const { addContact, deleteContact } = contactsSlice.actions;
-
+// export const { fetchingInProgress, fetchingSuccess, fetchingError } =
+// contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;
