@@ -4,7 +4,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
 
-// import { addContact } from 'redux/contactsSlice';
 import { getContacts } from 'redux/selectors';
 import { addContact } from 'redux/operations';
 
@@ -44,12 +43,12 @@ export default function ContactForm() {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    // values = {
-    //   id: nanoid(),
-    //   name: values.name,
-    //   phone: values.number,
-    //   createdAt: Date.now,
-    // };
+    const newContact = {
+      // id: nanoid(),
+      name: values.name,
+      phone: values.number,
+      createdAt: Date.now(),
+    };
     if (
       contacts.find(
         contact => contact.name.toLowerCase() === values.name.toLowerCase()
@@ -57,10 +56,10 @@ export default function ContactForm() {
     ) {
       toast.info(`${values.name} is already in contacts.`);
     } else {
-      dispatch(addContact(values));
+      dispatch(addContact(newContact));
       resetForm();
     }
-  };
+  }; 
 
   return (
     <Formik
