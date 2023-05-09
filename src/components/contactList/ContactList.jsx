@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { fetchContacts, deleteContact } from 'redux/operations';
 import {
-  getError,
-  getIsLoading,
-  getFilter,
-  getContacts,
+  selectError,
+  selectIsLoading,
+  selectFilter,
+  selectContacts,
+  // selectVisibleContacts,
 } from 'redux/selectors';
 
 import ContactItem from '../contactItem/ContactItem';
@@ -14,10 +15,11 @@ import css from './ContactList.module.css';
 
 export default function ContactList() {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
-  const contacts = useSelector(getContacts);
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
+  const filter = useSelector(selectFilter);
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+  // const visibleContacts = useSelector(selectVisibleContacts);
 
   const [visibleContacts, setVisibleContacts] = useState(contacts);
 
@@ -28,7 +30,7 @@ export default function ContactList() {
   useEffect(() => {
     setVisibleContacts(
       contacts.filter(contact =>
-        contact.name.toLowerCase().includes(filter.toLowerCase())
+        contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
       )
     );
   }, [contacts, filter]);
