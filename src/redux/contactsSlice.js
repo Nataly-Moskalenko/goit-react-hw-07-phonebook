@@ -7,17 +7,13 @@ const contactsInitialState = {
   error: null,
 };
 
-// function isRejectedAction(action) {
-//   return action.type.endsWith('rejected');
-// }
-
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchContacts.pending, function (state) {
+      .addCase(fetchContacts.pending, state => {
         state.isLoading = true;
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
@@ -51,13 +47,11 @@ const contactsSlice = createSlice({
           task => task.id === action.payload.id
         );
         state.items.splice(index, 1);
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
-    // .addCase(deleteContact.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // })
-    // .addMatcher(isRejectedAction, (state, action) => {})
-    // .addDefaultCase((state, action) => {});
   },
 });
 

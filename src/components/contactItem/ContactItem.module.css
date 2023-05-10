@@ -7,6 +7,27 @@
   color: #28048d;
 }
 
+.contactItem__icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+}
+
+.contactItem__descr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contactItem__descr:hover {  
+  cursor: context-menu;  
+  color: blue;
+}
+
+.contactItem__descr:hover .contactDeleteButton {
+  border-color: blue;
+}
+
 .contactDeleteButton:active {
   background-color: blue;
   color: white;

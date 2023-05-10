@@ -7,7 +7,6 @@ import {
   selectIsLoading,
   selectFilter,
   selectContacts,
-  // selectVisibleContacts,
 } from 'redux/selectors';
 
 import ContactItem from '../contactItem/ContactItem';
@@ -18,8 +17,7 @@ export default function ContactList() {
   const filter = useSelector(selectFilter);
   const contacts = useSelector(selectContacts);
   const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
-  // const visibleContacts = useSelector(selectVisibleContacts);
+  const error = useSelector(selectError);  
 
   const [visibleContacts, setVisibleContacts] = useState(contacts);
 
@@ -41,14 +39,12 @@ export default function ContactList() {
 
   return (
     <>
-      {isLoading && <p>Loading contacts...</p>}
-      {isLoading && !error && <b>Request in progress...</b>}
-      {error && <p>{error}</p>}
-      {contacts.length === 0 && <p>There are no contacts.</p>}
+      {isLoading && !error && <p>Loading contacts...</p>}      
+      {error && <p>Sorry, something went wrong: {error}</p>}    
       {visibleContacts.length === 0 && contacts.length !== 0 && (
         <p>There are no contacts by your search.</p>
       )}
-      {visibleContacts && (
+      {visibleContacts.length > 0 && (
         <ul>
           {visibleContacts.map(contact => (
             <li className={css.contactItem} key={contact.id}>
