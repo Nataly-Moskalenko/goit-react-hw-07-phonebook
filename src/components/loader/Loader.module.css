@@ -1,0 +1,23 @@
+.loader {
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.loader__icon {
+  margin-top: 2px;
+  animation: spin 2s infinite linear;
+}
+
+.loaderLarge {
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

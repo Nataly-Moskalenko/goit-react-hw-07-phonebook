@@ -1,4 +1,5 @@
 .contactDeleteButton {
+  display: flex;  
   margin-left: 12px;
   padding: 0 8px;
   border-radius: 4px;
@@ -13,22 +14,26 @@
   margin-right: 12px;
 }
 
-.contactItem__descr {
+.contactItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.contactItem__descr:hover {  
+.contactItem:hover {  
   cursor: context-menu;  
   color: blue;
 }
 
-.contactItem__descr:hover .contactDeleteButton {
+.contactItem:hover .contactDeleteButton {
   border-color: blue;
 }
 
 .contactDeleteButton:active {
   background-color: blue;
   color: white;
+}
+
+.contactItem:not(:last-child) {
+  margin-bottom: 12px;
 }

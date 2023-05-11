@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
+
+import { selectContacts, selectIsAdding } from 'redux/selectors';
+import { addContact } from 'redux/operations';
+
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
 
-import { selectContacts } from 'redux/selectors';
-import { addContact } from 'redux/operations';
-
+import {Loader} from '../loader/Loader';
 import css from './ContactForm.module.css';
 
 export default function ContactForm() {
@@ -20,6 +22,7 @@ export default function ContactForm() {
 
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
+  const isAdding = useSelector(selectIsAdding);
 
   const patternName =
     /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
@@ -42,9 +45,8 @@ export default function ContactForm() {
       .required('Required'),
   });
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = async (values, { resetForm }) => {
     const newContact = {
-      // id: nanoid(),
       name: values.name,
       phone: values.number,
       createdAt: Date.now(),
@@ -56,10 +58,15 @@ export default function ContactForm() {
     ) {
       toast.info(`${values.name} is already in contacts.`);
     } else {
-      dispatch(addContact(newContact));
-      resetForm();
+      try {
+        dispatch(addContact(newContact));
+        toast.info(`${values.name} added to contacts.`);
+        resetForm();
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }; 
+  };
 
   return (
     <Formik
@@ -99,7 +106,13 @@ export default function ContactForm() {
           render={msg => <div className={css.contactError}>{msg}</div>}
         />
         <button className={css.contactAddButton} type="submit">
-          Add contact
+          {isAdding && (
+            <div className={css.contactAdd}>
+              <span>Adding</span> 
+              <Loader />
+            </div>
+          )}
+          {!isAdding && 'Add contact'}
         </button>
       </Form>
     </Formik>
