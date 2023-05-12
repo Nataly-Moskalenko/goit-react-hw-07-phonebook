@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectIsDeleting, selectContacts } from 'redux/selectors';
+import { selectStatus, selectContacts } from 'redux/selectors';
 import { deleteContact } from 'redux/operations';
 
 import { FaUserAlt } from 'react-icons/fa';
@@ -14,16 +14,16 @@ import PropTypes from 'prop-types';
 
 export default function ContactItem({ name, number, id }) {
   const dispatch = useDispatch();
-  const isDeleting = useSelector(selectIsDeleting);
+  const status = useSelector(selectStatus);
   const contacts = useSelector(selectContacts);
   const [clickedContact, setClickedContact] = useState(null);
 
-  const handleDeleteContact = async id => {
+  const handleDeleteContact = id => {
     try {
       const deletingContact = contacts.filter(contact => contact.id === id);
       setClickedContact(deletingContact);
       dispatch(deleteContact(id));
-      toast.info(`${deletingContact[0].name} deleted from contacts.`);
+      toast.info(`Deleting ${deletingContact[0].name} from contacts.`);
     } catch (error) {
       console.log(error);
     }
@@ -42,8 +42,8 @@ export default function ContactItem({ name, number, id }) {
         onClick={() => handleDeleteContact(id)}
         // disabled={isDeleting}
       >
-        <span>Delete</span>       
-        {isDeleting && clickedContact && <Loader />}
+        <span>Delete</span>
+        {status === 'deleting' && clickedContact && <Loader />}
       </button>
     </li>
   );

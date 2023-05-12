@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetchContacts } from 'redux/operations';
 import {
   selectError,
-  selectIsLoading,
+  selectStatus,
   selectFilter,
   selectContacts,
 } from 'redux/selectors';
@@ -17,7 +17,7 @@ export default function ContactList() {
   const dispatch = useDispatch();
   const filter = useSelector(selectFilter);
   const contacts = useSelector(selectContacts);
-  const isLoading = useSelector(selectIsLoading);
+  const status = useSelector(selectStatus);
   const error = useSelector(selectError);
 
   const [visibleContacts, setVisibleContacts] = useState(contacts);
@@ -36,7 +36,7 @@ export default function ContactList() {
 
   return (
     <>
-      {isLoading && !error && (
+      {status === 'loading' && !error && (
         <div className={css.loading}>
           Loading contacts...
           <LoaderLarge />
