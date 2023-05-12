@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectContacts, selectStatus } from 'redux/selectors';
@@ -23,6 +24,8 @@ export default function ContactForm() {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
   const status = useSelector(selectStatus);
+
+  const [addedContact, setAddedContact] = useState({});
 
   const patternName =
     /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
@@ -60,13 +63,20 @@ export default function ContactForm() {
     } else {
       try {
         dispatch(addContact(newContact));
-        toast.info(`Adding ${values.name} to contacts.`);
+        setAddedContact(newContact);       
+        // toast.info(`Adding ${values.name} to contacts.`);
         resetForm();
       } catch (error) {
         console.log(error);
       }
     }
-  };
+  };  
+
+  useEffect(() => {
+    if (status === 'addedContact') {
+      toast.info(`${addedContact.name} added to contacts.`);
+    }
+  }, [status, addedContact]);
 
   return (
     <Formik

@@ -31,13 +31,13 @@ const handleFetchContacts = (state, action) => {
 };
 
 const handleAddContact = (state, action) => {
-  state.status = 'fulfilled';
+  state.status = 'addedContact';
   state.error = null;
   state.items = [action.payload, ...state.items];
 };
 
 const handleDeleteContact = (state, action) => {
-  state.status = 'fulfilled';
+  state.status = 'deletedContact';
   state.error = null;
   const index = state.items.findIndex(
     contact => contact.id === action.payload.id
@@ -61,7 +61,7 @@ const contactsSlice = createSlice({
         isAnyOf(
           fetchContacts.rejected,
           addContact.rejected,
-          deleteContact.rejected,
+          deleteContact.rejected
         ),
         handleRejected
       );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectStatus, selectContacts } from 'redux/selectors';
@@ -16,18 +16,24 @@ export default function ContactItem({ name, number, id }) {
   const dispatch = useDispatch();
   const status = useSelector(selectStatus);
   const contacts = useSelector(selectContacts);
-  const [clickedContact, setClickedContact] = useState(null);
+  const [clickedContact, setClickedContact] = useState({});
 
   const handleDeleteContact = id => {
     try {
       const deletingContact = contacts.filter(contact => contact.id === id);
-      setClickedContact(deletingContact);
+      setClickedContact(deletingContact[0]);
       dispatch(deleteContact(id));
-      toast.info(`Deleting ${deletingContact[0].name} from contacts.`);
+      // toast.info(`Deleting ${deletingContact[0].name} from contacts.`);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (status === 'deletedContact' && clickedContact.name) {
+      toast.info(`${clickedContact.name} deleted from contacts.`);
+    }
+  }, [status, clickedContact]);
 
   return (
     <li className={css.contactItem}>
@@ -43,7 +49,7 @@ export default function ContactItem({ name, number, id }) {
         // disabled={isDeleting}
       >
         <span>Delete</span>
-        {status === 'deleting' && clickedContact && <Loader />}
+        {status === 'deleting' && clickedContact.name && <Loader />}
       </button>
     </li>
   );
